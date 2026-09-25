@@ -21,8 +21,5 @@ int main(int argc, char** argv) {
     cout << n << " -> " << 1 << endl;
     cout << "Custo de S: " << cost << endl;
 
-
-
-
     return 0;
 }
