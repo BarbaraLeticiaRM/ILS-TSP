@@ -81,64 +81,10 @@ vector<InsertionInfo> calcularCustoInsercao(Solution& s, vector<int>& CL, Data d
 }
 
 
-// Para ordenação utilizei o metodo mergesort (codigo do geeksForGeeks)
-void merge(vector<InsertionInfo>& vetor, int esquerda, int mid, int direita){
-                         
-    int n1 = mid - esquerda + 1;
-    int n2 = direita - mid;
-
-    // Cria vetores temporários E (esquerda) e D (direita)
-    vector<InsertionInfo> E(n1), D(n2);
-
-    // Copia os dados para os vetores temporários E e D 
-    for (int i = 0; i < n1; i++)
-        E[i] = vetor[esquerda + i];
-    for (int j = 0; j < n2; j++)
-        D[j] = vetor[mid + 1 + j];
-
-    int i = 0, j = 0;
-    int k = esquerda;
-
-    // Merge: 
-    while (i < n1 && j < n2) {
-        if (E[i].custo <= D[j].custo) {
-            vetor[k] = E[i];
-            i++;
-        }
-        else {
-            vetor[k] = D[j];
-            j++;
-        }
-        k++;
-    }
-
-    // Copia os elementos restantes de E (se houver)
-    while (i < n1) {
-        vetor[k] = E[i];
-        i++;
-        k++;
-    }
-
-    // Copia os elementos restantes de D (se houver)
-    while (j < n2) {
-        vetor[k] = D[j];
-        j++;
-        k++;
-    }
-}
-
-
-void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao, int esquerda, int direita){
-    
-    // Caso base
-    if (esquerda >= direita)
-        return;
-
-    // Lógica do MergeSort 
-    int meio = esquerda + (direita - esquerda) / 2;
-    ordenarEmOrdemCrescente(custoInsercao, esquerda, meio);
-    ordenarEmOrdemCrescente(custoInsercao, meio + 1, direita);
-    merge(custoInsercao, esquerda, meio, direita);
+void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao){
+    // A função lambda serve para mostrar como o vetor deve ser ordenado
+    sort(custoInsercao.begin(), custoInsercao.end(), [](const InsertionInfo &a, const InsertionInfo &b) 
+    { return a.custo < b.custo; });
 }
 
 
@@ -160,30 +106,44 @@ void removerDeCL(int selecionado, vector<int>& CL)
 
 void inserirNaSolucao(Solution* s, InsertionInfo custoInsercao)
 {
-    // Insere o no selecionado no lugar da aresta removida  
-    s->sequence.insert(s->sequence.begin() + custoInsercao.arestaRemovida, custoInsercao.noInserido);
+    // Insere o no selecionado no lugar da aresta removida
+    // O primeiro no eh fixo (1)  
+
+    if(custoInsercao.arestaRemovida != 0 )
+    {
+        s->sequence.insert(s->sequence.begin() + custoInsercao.arestaRemovida, custoInsercao.noInserido);
+    }
+
 }
 
+double calculaCustoSolucao(vector<int> sequence, Data data)
+{
+    int n = sequence.size();
+    double cost = 0.0;
+    for (int i = 0; i < n-1; i++) {
+        cost += data.getDistance(sequence[i], sequence[i+1]);
+    }
+    return cost;    
+}
 
 Solution Construcao(Data data)
 {
     Solution s;
-
-    s.sequence = escolher3NosAleatorios(data);
     
+    s.custo = 0;
+    s.sequence = escolher3NosAleatorios(data);
+        
     vector<int> CL = nosRestantes(data, s.sequence); 
 
     while(!CL.empty()) {
         vector<InsertionInfo> custoInsercao = calcularCustoInsercao(s, CL, data);
-        ordenarEmOrdemCrescente(custoInsercao, 0, custoInsercao.size() - 1);
+        ordenarEmOrdemCrescente(custoInsercao);
         double alpha = (double) rand() / RAND_MAX;
         int selecionado = rand() % ((int) ceil(alpha * custoInsercao.size()));
-        // O primeiro no eh fixo (1)
-        if(custoInsercao[selecionado].arestaRemovida != 0 )
-        {
-            removerDeCL(custoInsercao[selecionado].noInserido, CL);
-            inserirNaSolucao(&s, custoInsercao[selecionado]);
-        }
+        removerDeCL(custoInsercao[selecionado].noInserido, CL);
+        inserirNaSolucao(&s, custoInsercao[selecionado]);
     }
+
+    s.custo = calculaCustoSolucao(s.sequence, data);
     return s;
 }
