@@ -19,7 +19,7 @@ struct InsertionInfo
 struct Solution
 {
     vector<int> sequence; // Sequencia de nos da solucao 
-    int custo;  
+    double custo;  
 };
 
 vector<int> escolher3NosAleatorios(Data data);
