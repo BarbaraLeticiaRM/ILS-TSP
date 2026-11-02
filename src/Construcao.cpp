@@ -22,42 +22,25 @@ vector<int> escolher3NosAleatorios(Data data)
         nosAleatorios.push_back(dist(gen));
     }
 
-    //O ultimo no eh o 1 
-    nosAleatorios.push_back(1); 
-
     return nosAleatorios;
 }
 
 // Cria o vetor de nos restantes CL:
-vector<int> nosRestantes(Data data, vector<int> sequence)
-{
+vector<int> nosRestantes(Data data, vector<int> sequence) {
     int n = data.getDimension();
     vector<int> CL;
+    
+    vector<bool> utilizado(n + 1, false); 
 
-    // Cria um vetor de booleanos 
-    vector<bool> utilizado;
-
-    // Preenchendo o veltor 'utilizado' com false
-    for (int i = 0; i < n; i++)
-    {
-        utilizado.push_back(false);
-    }
-
-    // Marca os nos que ja estão na sequencia como true 
-    for (int i = 0; i < sequence.size(); i++)
-    {
+    for (int i = 0; i < sequence.size(); i++) {
         utilizado[sequence[i]] = true;
     }
 
-    // Adiciona ao CL apenas os nos que continuam false
-    for (int i = 1; i <= n; i++)
-    {
-        if (!utilizado[i])
-        {
+    for (int i = 1; i <= n; i++) {
+        if (!utilizado[i]) {
             CL.push_back(i);
         }
     } 
-
     return CL;
 }
 
@@ -106,14 +89,7 @@ void removerDeCL(int selecionado, vector<int>& CL)
 
 void inserirNaSolucao(Solution* s, InsertionInfo custoInsercao)
 {
-    // Insere o no selecionado no lugar da aresta removida
-    // O primeiro no eh fixo (1)  
-
-    if(custoInsercao.arestaRemovida != 0 )
-    {
-        s->sequence.insert(s->sequence.begin() + custoInsercao.arestaRemovida, custoInsercao.noInserido);
-    }
-
+    s->sequence.insert(s->sequence.begin() + custoInsercao.arestaRemovida, custoInsercao.noInserido);
 }
 
 double calculaCustoSolucao(vector<int> sequence, Data data)
@@ -123,6 +99,7 @@ double calculaCustoSolucao(vector<int> sequence, Data data)
     for (int i = 0; i < n-1; i++) {
         cost += data.getDistance(sequence[i], sequence[i+1]);
     }
+    cost+= data.getDistance(sequence[n-1], sequence[0]);
     return cost;    
 }
 
