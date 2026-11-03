@@ -65,27 +65,40 @@ Solution Perturbacao(Solution s, Data data)
     }
 
     vector<int> nova_solucao;
-    nova_solucao.reserve(V); // Otimização de alocação de memória
-    
+        
     // Início até o começo do segmento A
-    for (int i = 0; i < start_a; i++) nova_solucao.push_back(sol.sequence[i]);
-    
+    for (int i = 0; i < start_a; i++) 
+    {
+        nova_solucao.push_back(sol.sequence[i]);
+    }
+
     // Inserir Segmento B no lugar do A
-    for (int i = start_b; i < start_b + tam_b; i++) nova_solucao.push_back(sol.sequence[i]);
-    
+    for (int i = start_b; i < start_b + tam_b; i++) 
+    {
+        nova_solucao.push_back(sol.sequence[i]);
+    }
+
     // O meio entre o segmento A e o segmento B
-    for (int i = start_a + tam_a; i < start_b; i++) nova_solucao.push_back(sol.sequence[i]);
-    
+    for (int i = start_a + tam_a; i < start_b; i++)
+    {
+        nova_solucao.push_back(sol.sequence[i]);
+    }
+
     // Inserir Segmento A no lugar do B
-    for (int i = start_a; i < start_a + tam_a; i++) nova_solucao.push_back(sol.sequence[i]);
-    
+    for (int i = start_a; i < start_a + tam_a; i++) 
+    {
+        nova_solucao.push_back(sol.sequence[i]);
+    }
+
     // Do final do segmento B até o final do vetor
-    for (int i = start_b + tam_b; i < V; i++) nova_solucao.push_back(sol.sequence[i]);
-    
+    for (int i = start_b + tam_b; i < V; i++) 
+    {
+        nova_solucao.push_back(sol.sequence[i]);
+    } 
+
+    // Atualiza a solução 
     sol.sequence = nova_solucao; 
-
     sol.custo = calculaCustoSolucao(sol.sequence, data);  
-
 
     return sol; 
 }
