@@ -1,9 +1,12 @@
 #include "Data.h"
 #include "Construcao.h"
-
+#include "BuscaLocal.h"
+#include "Perturbacao.h"
+#include "Ils.h"
 #include <iostream>
 
 using namespace std; 
+
 
 int main(int argc, char** argv) {
 
@@ -11,15 +14,24 @@ int main(int argc, char** argv) {
     data.read();
     size_t n = data.getDimension();
 
-    cout << "Exemplo de Solucao s = ";
-    double cost = 0.0;
-    for (size_t i = 1; i < n; i++) {
-        cout << i << " -> ";
-        cost += data.getDistance(i, i+1);
+    int maxIter = 50; 
+    int maxIterIls;
+    int nExecucoes = 1; 
+    double tempoMedio, custoMedio; 
+
+    if(n >= 150){
+        maxIterIls = n/2;
     }
-    cost += data.getDistance(n, 1);
-    cout << n << " -> " << 1 << endl;
-    cout << "Custo de S: " << cost << endl;
+    else{
+        maxIterIls = n; 
+    }
+
+    resolveILS(maxIter, maxIterIls, data, &tempoMedio, &custoMedio, nExecucoes); 
+
+    cout << endl << data.getInstanceName() << endl; 
+    cout << "Tempo de execucao: " << tempoMedio << " s" << endl;
+    cout << "Custo medio: " << custoMedio << endl;
+    cout << "------------------------------------------------" << endl;  
 
     return 0;
 }
