@@ -2,8 +2,6 @@
 #define BUSCALOCAL_H
 
 #include "Construcao.h"
-#include "Data.h"
-
 
 bool bestImprovementSwap(Solution *s, Data data); 
 void swap_edges(vector<int> &path, int i, int j);
