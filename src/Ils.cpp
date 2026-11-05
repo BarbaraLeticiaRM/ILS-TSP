@@ -47,9 +47,9 @@ void resolveILS(int maxIter, int maxIterIls, Data data, double* tempoMedio, doub
         auto inicio = chrono::steady_clock::now();
 
         sol = ILS(maxIter, maxIterIls, data); 
-
+ 
         auto fim = chrono::steady_clock::now();
-
+        
         chrono::duration<double> tempo_decorrido = fim - inicio;
 
         custoTotal += sol.custo;

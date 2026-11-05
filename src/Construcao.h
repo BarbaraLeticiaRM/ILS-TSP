@@ -8,6 +8,7 @@
 #include <vector>
 #include <cmath>
 #include <random>
+#include <set>
 
 struct InsertionInfo
 {

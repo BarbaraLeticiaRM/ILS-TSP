@@ -11,6 +11,7 @@ Solution Perturbacao(Solution s, Data data)
     }
 
     int tam_max = ceil(V/10); 
+    int tam_min = 2;
 
     bool flag = false; 
 
@@ -18,10 +19,15 @@ Solution Perturbacao(Solution s, Data data)
     while(flag == false)
     {
         // x + rand() % (y - x + 1)
-        tam1 = 2 + rand() % (tam_max - 1);
-        tam2 = 2 + rand() % (tam_max - 1);
+        tam1 = 2 + rand() % (std::max(tam_max,tam_min) - 1);
+        tam2 = 2 + rand() % (std::max(tam_max, tam_min) - 1);
 
         start1 = rand() % (V - tam1 + 1);
+
+        if(start1 == 0)
+        {
+            start1++; 
+        }
 
         vector<int> posicoes_start2; 
         
@@ -46,7 +52,11 @@ Solution Perturbacao(Solution s, Data data)
         // Se houver posições válidas, sorteia o segundo
 
         if (!posicoes_start2.empty()) {
-            int idx = rand() % (posicoes_start2.size() - 1);
+            int idx = rand() % (posicoes_start2.size());
+            if(idx == 0)
+            {
+                idx++;
+            }
             start2 = posicoes_start2[idx];
             flag = true; 
         }

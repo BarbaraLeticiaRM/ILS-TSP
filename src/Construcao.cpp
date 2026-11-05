@@ -8,6 +8,7 @@ vector<int> escolher3NosAleatorios(Data data)
     int min = 2, max = dimensao;
     
     vector<int> nosAleatorios; 
+    nosAleatorios.reserve(4);
     //O primeiro no eh o 1 
     nosAleatorios.push_back(1); 
     
@@ -16,10 +17,15 @@ vector<int> escolher3NosAleatorios(Data data)
     mt19937 gen(rd());
     uniform_int_distribution<int> dist(min, max);
 
+    std::set<int> numerosUnicos;
+
+    while (numerosUnicos.size() < 3) {
+        numerosUnicos.insert(dist(gen));
+    }
+
     //Gera tres numeros aleatorios, que serao os nos iniciais 
-    for(int i = 0; i < 3; i++)
-    {
-        nosAleatorios.push_back(dist(gen));
+    for (int num : numerosUnicos) {
+        nosAleatorios.push_back(num); 
     }
 
     return nosAleatorios;
@@ -109,7 +115,7 @@ Solution Construcao(Data data)
     
     s.custo = 0;
     s.sequence = escolher3NosAleatorios(data);
-        
+
     vector<int> CL = nosRestantes(data, s.sequence); 
 
     while(!CL.empty()) {
@@ -117,8 +123,10 @@ Solution Construcao(Data data)
         ordenarEmOrdemCrescente(custoInsercao);
         double alpha = (double) rand() / RAND_MAX;
         int selecionado = rand() % ((int) ceil(alpha * custoInsercao.size()));
-        removerDeCL(custoInsercao[selecionado].noInserido, CL);
-        inserirNaSolucao(&s, custoInsercao[selecionado]);
+        if(custoInsercao[selecionado].arestaRemovida != 0){
+            removerDeCL(custoInsercao[selecionado].noInserido, CL);
+            inserirNaSolucao(&s, custoInsercao[selecionado]);
+        }
     }
 
     s.custo = calculaCustoSolucao(s.sequence, data);

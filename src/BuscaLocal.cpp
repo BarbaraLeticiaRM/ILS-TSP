@@ -71,7 +71,7 @@ bool bestImprovement2Opt(Solution *s, Data data)
     double bestDelta = 0;
     int best_i, best_j;    
 
-    for (int i = 0; i < s->sequence.size() - 1; i++) {
+    for (int i = 1; i < s->sequence.size() - 1; i++) {
         int vi = s->sequence[i];
         int vi_next = s->sequence[i + 1];
         for (int j = i + 2; j < s->sequence.size() - 1; j++) {
